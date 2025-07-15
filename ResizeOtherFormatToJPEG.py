@@ -6,9 +6,14 @@ from PIL import Image
 import pillow_heif
 from moviepy.editor import VideoFileClip
 
+print("import completed")
+
 # User configuration: set input and output directories here
-input_dir = r'C:\C_working\TS19_working\Fullsize\Trip 4 - Mulwala'
-output_dir = r'C:\C_working\TS19_working\Resized_long_path\Trip 4 - Mulwala'
+input_dir = r'C:\C_working\TS19_working\Fullsize\Trip 2 - Benalla\Photos\Benalla_Day_01_Elton'
+
+
+# input_dir = r'C:\C_working\TS19_working\Fullsize\Trip 2 - Benalla'
+output_dir = r'C:\C_working\TS19_working\Resized_long_path_other_format\Benalla_Day_01_Elton'
 
 target_size_kb = 500
 count = 0
