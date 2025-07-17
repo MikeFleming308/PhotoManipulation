@@ -11,7 +11,7 @@ from moviepy.editor import VideoFileClip
 print("import completed")
 
 # User configuration
-input_dir = r'C:\C_working\TS19_working\Fullsize\Trip 2 - Benalla'
+input_dir = r'C:\C_working\TS19_working\Fullsize\TEST'
 output_dir = r'C:\C_working\TS19_working\Resized_long_path_other_format'
 
 # input_dir = r'C:\Users\mikef\OneDrive\Documents\Coding\Python\Data'
