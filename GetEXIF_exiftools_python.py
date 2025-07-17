@@ -13,8 +13,14 @@ except ImportError:
     pillow_heif = None
     print("Warning: pillow-heif not installed. HEIC/HEIF metadata fallback may be limited.")
 
-root_dir = r'C:\C_working\TS19_working\Fullsize\TEST'
-output_csv = r'C:\C_working\TS19_working\PhotoEXIFInfo.csv'
+# r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 1 - NIOA'
+# r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 2 - Benalla'
+root_dir = r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 3 - Mulwala'
+# r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 4 - Mulwala'
+# r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 5 - Mulwala'
+# root_dir = r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos'
+# root_dir = r'C:\C_working\TS19_working\Fullsize\TEST'
+output_csv = r'C:\C_working\TS19_working\PhotoEXIFInfo_T3_Mulwala.csv'
 valid_extensions = {'.jpg', '.jpeg', '.heif', '.heic', '.png', '.mov'}
 
 def run_exiftool(file_path):
@@ -135,16 +141,17 @@ def extract_mov_creation_date_ffprobe(file_path):
 
 def main():
     csv_fields = [
+        'file',  # filename only
+        'extension',  # file extension
         'file_path',
         'exif_accessible',
-        'date_times',   # JSON string of all extracted dates as ISO strings
+        'date_times',
         'earliest_date',
         'device_id',
         'make',
         'model',
         'serial_number'
     ]
-
     with open(output_csv, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=csv_fields)
         writer.writeheader()
@@ -156,6 +163,7 @@ def main():
                     continue
 
                 file_path = os.path.join(dirpath, filename)
+
                 exif_accessible = 'No'
                 dates = {}
                 device_id = None
@@ -185,6 +193,8 @@ def main():
                 earliest_date = min(dates.values()) if dates else None
 
                 writer.writerow({
+                    'file': filename,
+                    'extension': ext,
                     'file_path': file_path,
                     'exif_accessible': exif_accessible,
                     'date_times': json.dumps({k: v.isoformat() for k, v in dates.items()}, ensure_ascii=False),
@@ -194,8 +204,9 @@ def main():
                     'model': model,
                     'serial_number': serial_number
                 })
+                output_txt = file_path[143:]
 
-                print(f"Processed: {file_path}")
+                print(f"Processed: {output_txt}")
 
     print("Hybrid metadata extraction completed.")
 
