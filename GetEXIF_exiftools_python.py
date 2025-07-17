@@ -13,7 +13,7 @@ except ImportError:
     pillow_heif = None
     print("Warning: pillow-heif not installed. HEIC/HEIF metadata fallback may be limited.")
 
-root_dir = r'C:\C_working\TS19_working\Resized'
+root_dir = r'C:\C_working\TS19_working\Fullsize\TEST'
 output_csv = r'C:\C_working\TS19_working\PhotoEXIFInfo.csv'
 valid_extensions = {'.jpg', '.jpeg', '.heif', '.heic', '.png', '.mov'}
 
