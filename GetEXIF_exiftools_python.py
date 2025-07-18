@@ -15,12 +15,12 @@ except ImportError:
 
 # r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 1 - NIOA'
 # r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 2 - Benalla'
-root_dir = r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 3 - Mulwala'
+# r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 3 - Mulwala'
 # r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 4 - Mulwala'
-# r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 5 - Mulwala'
+root_dir = r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 5 - Mulwala'
 # root_dir = r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos'
 # root_dir = r'C:\C_working\TS19_working\Fullsize\TEST'
-output_csv = r'C:\C_working\TS19_working\PhotoEXIFInfo_T3_Mulwala.csv'
+output_csv = r'C:\C_working\TS19_working\PhotoEXIFInfo_T5_Mulwala.csv'
 valid_extensions = {'.jpg', '.jpeg', '.heif', '.heic', '.png', '.mov'}
 
 def run_exiftool(file_path):
