@@ -124,7 +124,7 @@ def process_row(row: pd.Series):
         'final_size_bytes': None,
         'copied_full_size_due_to_error': False,
     }
-
+    info['output_image_path'] = str(output_path.resolve())
     try:
         original_path = Path(row['file_path'])
         if not original_path.is_file():
@@ -199,6 +199,7 @@ def main():
     df['resized_image'] = False
     df['processing_error'] = ''
     df['output_folder_path'] = ''
+    df['output_image_path'] = ''
     df['jpeg_quality_used'] = None
     df['final_file_size_bytes'] = None
     df['copied_full_size_due_to_error'] = False
@@ -211,28 +212,33 @@ def main():
         try:
             result = process_row(row)
         except Exception as e:
-            logging.error(f"Error processing row {idx + 1}: {e}")
             result = {
                 'success': False,
                 'resized': False,
-                'error_message': f"Exception: {e}",
+                'error_message': str(e),
                 'output_folder': '',
                 'jpeg_quality': None,
                 'final_size_bytes': None,
-                'copied_full_size_due_to_error': False
+                'copied_full_size_due_to_error': True,
+                'output_image_path': ''
             }
 
-        print(f"Output folder: {result['output_folder']}")
-        print(f"Success: {result['success']} Resized: {result['resized']}")
+        print(f"Output folder: {result.get('output_folder', '')}")
+        print(f"Success: {result.get('success', False)} Resized: {result.get('resized', False)}")
 
-        df.at[idx, 'processing_success'] = result['success']
-        df.at[idx, 'resized_image'] = result['resized']
-        df.at[idx, 'processing_error'] = result['error_message']
-        df.at[idx, 'output_folder_path'] = result['output_folder']
-        df.at[idx, 'jpeg_quality_used'] = result['jpeg_quality']
-        df.at[idx, 'final_file_size_bytes'] = result['final_size_bytes']
-        df.at[idx, 'copied_full_size_due_to_error'] = result['copied_full_size_due_to_error']
+        df.at[idx, 'processing_success'] = result.get('success', False)
+        df.at[idx, 'resized_image'] = result.get('resized', False)
+        df.at[idx, 'processing_error'] = result.get('error_message', '')
+        df.at[idx, 'output_folder_path'] = result.get('output_folder', '')
+        df.at[idx, 'output_image_path'] = result.get('output_image_path', '')
+        df.at[idx, 'jpeg_quality_used'] = result.get('jpeg_quality', None)
+        df.at[idx, 'final_file_size_bytes'] = result.get('final_size_bytes', None)
+        df.at[idx, 'copied_full_size_due_to_error'] = result.get('copied_full_size_due_to_error', False)
 
+    # Save the updated DataFrame to a CSV
+    output_csv = Path(OUTPUT_BASE_FOLDER) / "image_processing_results.csv"
+    df.to_csv(output_csv, index=False)
+    print(f"Results saved to {output_csv}")
 
 if __name__ == "__main__":
     main()
