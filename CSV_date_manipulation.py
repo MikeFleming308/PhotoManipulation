@@ -1,5 +1,25 @@
 import pandas as pd
 from datetime import datetime, timedelta
+"""
+Purpose of the script (process and analyze survey date data from CSV files): The script reads survey date and time data 
+from an input CSV file, parses and converts these date-time strings into datetime objects with timezone adjustment 
+(UTC to AEST), and calculates the duration between start and end times. Duration calculation and flagging (identify 
+records with long durations): It computes the duration in hours between the start and end timestamps, then flags 
+records  where this duration exceeds 2 hours. Date formatting and midpoint computation (generate formatted date 
+strings and midpoint timestamp): The script formats the start, end, and midpoint dates in a consistent string format 
+and removes intermediate datetime columns for cleaner output. 
+
+Output generation (save processed data into a new CSV file): Finally, it saves the cleaned and enriched dataset, 
+including flags and calculated fields, to an output CSV file for  further use or analysis.
+
+Input: CSV export from S123 website or csv previously output from this script. (eg, run script, identify problem dates, adjust in 
+"inspect_date" and "inspect_end" fields and run again as input.
+
+Output: TS19_Survey_dates.csv'
+"""
+
+
+
 
 # in_csv = r'C:\C_working\TS19_working\S123_CSV\TEST_CSV.csv'
 # out_csv = r'C:\C_working\TS19_working\S123_CSV\OUT_CSV.csv'
