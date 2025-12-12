@@ -5,6 +5,8 @@ import csv
 # Define the folder to scan
 # folder_path = r"C:\C_working\TS19_working\Fullsize"
 folder_path = r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos'
+# folder_path = r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 5 - Mulwala'
+
 output_csv = os.path.join(folder_path, "All file list.csv")
 
 # Define known image extensions
