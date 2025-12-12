@@ -7,20 +7,20 @@ from datetime import datetime
 from PIL import Image
 from PIL.ExifTags import TAGS
 
+
+
+
+
 try:
     import pillow_heif
 except ImportError:
     pillow_heif = None
     print("Warning: pillow-heif not installed. HEIC/HEIF metadata fallback may be limited.")
 
-# r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 1 - NIOA'
-# r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 2 - Benalla'
-root_dir = r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 3 - Mulwala'
-# r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 4 - Mulwala'
-# r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Trip 5 - Mulwala'
-# root_dir = r'C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos'
-# root_dir = r'C:\C_working\TS19_working\Fullsize\TEST'
-output_csv = r'C:\C_working\TS19_working\PhotoEXIFInfo_T3_Mulwala.csv'
+root_dir = "C:\C_Working\TEST\Missing_EXIF"
+
+output_csv = r'C:\C_Working\TEST\Hybrid_EXIF_output.csv'
+
 valid_extensions = {'.jpg', '.jpeg', '.heif', '.heic', '.png', '.mov'}
 
 def run_exiftool(file_path):
@@ -35,6 +35,8 @@ def run_exiftool(file_path):
         return {'Error': str(e)}
 
 def parse_exif_date_str(date_str):
+    if not isinstance(date_str, str):
+        return None
     formats = [
         '%Y:%m:%d %H:%M:%S',
         '%Y-%m-%d %H:%M:%S',
@@ -140,6 +142,7 @@ def extract_mov_creation_date_ffprobe(file_path):
     return metadata
 
 def main():
+    count = 0
     csv_fields = [
         'file',  # filename only
         'extension',  # file extension
@@ -204,9 +207,11 @@ def main():
                     'model': model,
                     'serial_number': serial_number
                 })
-                output_txt = file_path[143:]
-
-                print(f"Processed: {output_txt}")
+                output_txt = file_path
+                count += 1
+                if count % 100 == 0:
+                    print(f"Processed {count} files...")
+                    print(f"Processed: {output_txt}")
 
     print("Hybrid metadata extraction completed.")
 
