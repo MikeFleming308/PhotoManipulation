@@ -8,6 +8,13 @@ import io
 import shutil
 import logging
 
+"""
+This script take a csv holding filepaths for individual images and exports to a new location as .jpg less than 
+500kb in size. It also creates and names folders, renames the images and writes to a log file that holds the new 
+filepath and much of the information held in the input file.
+"""
+
+
 # To handle truncated images gracefully
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -17,10 +24,9 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s %(levelname)s %(message)s'
 )
+INPUT_CSV = r"C:\C_working\TS19_working\OUTPUT\Master3.csv"
 
-INPUT_CSV = r"C:\C_working\TS19_working\Working\Master.csv"
-# OUTPUT_BASE_FOLDER = r"C:\C_working\TS19_working\Working\OUTPUT"
-OUTPUT_BASE_FOLDER = r"C:\Users\Michael.Fleming\OneDrive - Aurecon Group\Shortcuts\522272 - GWEO - Work Order 1 - Deed Management Services - Survey Results and Photos\Catalogued_photos"
+OUTPUT_BASE_FOLDER = r"C:\C_working\TS19_working\OUTPUT\Photos"
 
 MAX_FILESIZE_BYTES = 500 * 1024  # 500 KB
 
@@ -29,22 +35,22 @@ IMAGE_EXTS = {'.jpg', '.jpeg', '.png', '.heic'}
 VIDEO_EXTS = {'.mov'}
 
 
-def load_image(file_path: Path) -> Image.Image:
-    """Load an image or first video frame from file_path."""
-    ext = file_path.suffix.lower()
+def load_image(photo_file_path: Path) -> Image.Image:
+    """Load an image or first video frame from photo_file_path."""
+    ext = photo_file_path.suffix.lower()
     try:
         if ext in IMAGE_EXTS:
             if ext == '.heic':
-                heif_file = pillow_heif.read_heif(str(file_path))
+                heif_file = pillow_heif.read_heif(str(photo_file_path))
                 image = Image.frombytes(
                     heif_file.mode, heif_file.size, heif_file.data, "raw"
                 )
             else:
-                image = Image.open(file_path)
+                image = Image.open(photo_file_path)
             image.load()  # force loading now to catch errors early
             return image
         elif ext in VIDEO_EXTS:
-            clip = VideoFileClip(str(file_path))
+            clip = VideoFileClip(str(photo_file_path))
             frame = clip.get_frame(0)  # get first frame
             image = Image.fromarray(frame)
             clip.reader.close()
@@ -54,7 +60,7 @@ def load_image(file_path: Path) -> Image.Image:
         else:
             raise ValueError(f"Unsupported file extension: {ext}")
     except Exception as e:
-        raise RuntimeError(f"Failed to load image/video '{file_path}': {e}")
+        raise RuntimeError(f"Failed to load image/video '{photo_file_path}': {e}")
 
 
 def save_jpeg_under_size(image: Image.Image, output_path: Path, max_bytes: int):
@@ -133,15 +139,15 @@ def process_row(row: pd.Series) -> dict:
     }
 
     try:
-        original_path = Path(row['file_path'])
+        original_path = Path(row['photo_file_path'])
         if not original_path.is_file():
             msg = f"File not found: {original_path}"
             logging.error(msg)
             info['error_message'] = msg
             return info
 
-        group_name = str(row.get('objectid') or 'ungrouped').strip()
-        print(f"Grouping folder name (objectid): '{group_name}'")
+        group_name = str(row.get('s123_OBJECTID') or 'ungrouped').strip()
+        print(f"Grouping folder name (s123_OBJECTID): '{group_name}'")
 
         unique_name = str(row.get('photo_name') or original_path.stem).strip()
 
@@ -189,7 +195,7 @@ def process_row(row: pd.Series) -> dict:
             info['resized'] = False
 
     except Exception as e:
-        msg = f"Fatal error processing file '{row.get('file_path')}': {e}"
+        msg = f"Fatal error processing file '{row.get('photo_file_path')}': {e}"
         logging.error(msg)
         info['error_message'] = msg
 
@@ -212,9 +218,9 @@ def main():
     df['copied_full_size_due_to_error'] = False
 
     for idx, row in df.iterrows():
-        file_path = row.get('file_path')
-        print(f"Processing row {idx + 1}/{len(df)}: {file_path}")
-        logging.info(f"Processing row {idx + 1}/{len(df)}: {file_path}")
+        photo_file_path = row.get('photo_file_path')
+        print(f"Processing row {idx + 1}/{len(df)}: {photo_file_path}")
+        logging.info(f"Processing row {idx + 1}/{len(df)}: {photo_file_path}")
 
         try:
             result = process_row(row)
