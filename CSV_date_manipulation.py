@@ -1,3 +1,5 @@
+# C:\C_working\Python_scripts\PhotoManipulation\CSV_date_manipulation.py
+
 import pandas as pd
 from datetime import datetime, timedelta
 """
@@ -22,9 +24,9 @@ Output: TS19_Survey_dates.csv'
 
 
 # in_csv = r'C:\C_working\TS19_working\S123_CSV\TEST_CSV.csv'
-# out_csv = r'C:\C_working\TS19_working\S123_CSV\OUT_CSV.csv'
-in_csv = r'C:\C_working\TS19_working\S123_CSV\TS19_Survey_datesCorrected.csv'
-out_csv = r'C:\C_working\TS19_working\S123_CSV\TS19_Survey_dates.csv'
+
+in_csv = r"C:\C_working\TS19_working\Working\S123_CSV\S123_tbl.csv"
+out_csv = r'C:\C_working\TS19_working\Working\S123_CSV\TS19_Survey_dates_processed.csv'
 
 # Read your CSV
 df = pd.read_csv(in_csv)
@@ -56,6 +58,13 @@ df["END_dt"] = df["inspect_end"].apply(lambda x: parse_datetime(x, formats))
 # Ensure datetime columns are properly typed
 df["START_dt"] = pd.to_datetime(df["START_dt"], errors='coerce')
 df["END_dt"] = pd.to_datetime(df["END_dt"], errors='coerce')
+
+# check for unparsed dates
+print("Unparsed 'inspect_date' rows:")
+print(df[df["START_dt"].isna()]["inspect_date"])
+
+print("Unparsed 'inspect_end' rows:")
+print(df[df["END_dt"].isna()]["inspect_end"])
 
 # Calculate duration
 df["duration_hours"] = ((df["END_dt"] - df["START_dt"]).dt.total_seconds() / 3600).astype(float).round(2)
